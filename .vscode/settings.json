@@ -30,5 +30,6 @@
     "**/images/*.jpg": true,
     "**/utkface": true
   },
-  "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+  "python.pythonPath": "/home/daniel/.pyenv/versions/anaconda3-5.3.1/bin/python"
 }
