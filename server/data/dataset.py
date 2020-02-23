@@ -24,6 +24,9 @@ class DataLoader():
         self.y_train = list(map(to_label, self.x_train))
         self.y_test = list(map(to_label, self.x_test))
 
+        self.train_dir = dirs.train_dir
+        self.test_dir = dirs.test_dir
+
     def load_train(self):
         r"""File names of training data and their labels"""
         return self.x_train, self.y_train
