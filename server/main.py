@@ -1,3 +1,4 @@
+import random
 import numpy as np
 import cv2
 from flask import Flask, request, jsonify
@@ -33,18 +34,25 @@ def predict_age():
         nparr = np.fromstring(file.read(), np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-        # TODO call the model
+        # TODO call the model / resize
 
         message = "Succeed!"
-        age = 30
+        age_cnn = random.randint(20, 60)
+        age_regression = random.randint(34, 48)
+        age_cluster = random.randint(2, 80)
+        ages = {
+            "cnn": age_cnn,
+            "regression": age_regression,
+            "clustering": age_cluster,
+        }
     except Exception:
         message = "Invalid format"
-        age = None
+        ages = None
 
     return jsonify({
         "name": file_name,
         "message": message,
-        "ages": {"cnn": age, "regression": 12, "clustering": 24}
+        "ages": ages,
     })
 
 
