@@ -21,8 +21,8 @@ export default {
   --bg-color: #eef0f2;
   --theme1: #42b983;
   --theme1-light: #64c89b;
-  --danger: #f56c6c;
-  --yo2: #c6538c;
+  --theme3: #f56c6c;
+  --theme2: #106fb2;
   --title: #2c3e50;
   --desc: #6a8bad;
 }

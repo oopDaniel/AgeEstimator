@@ -2,10 +2,10 @@
   <div class="photo-uploader">
     <h1>{{ msg }}</h1>
     <section>
-      <div>Upload your image below</div>
-      <div class="desc">(square image size preferred)</div>
+      <div>Upload your image to estimate the age</div>
+      <div class="desc">(Less then 2MB. Square image size preferred)</div>
       <section class="card-section center">
-        <el-card class="card-box">
+        <el-card class="card-box card-shadow">
           <el-upload
             :class="{
               'avatar-uploader': true,
@@ -20,7 +20,15 @@
             <i class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
           <div v-if="imageUrl !== ''" class="preview-box">
-            <img width="100%" :src="imageUrl" alt="" />
+            <transition name="fade">
+              <img
+                width="100%"
+                :src="imageUrl"
+                alt=""
+                @load="onImgLoaded"
+                v-show="isImgReady"
+              />
+            </transition>
           </div>
         </el-card>
       </section>
@@ -29,6 +37,12 @@
         v-if="hasUploaded"
         :ages="prediction.ages"
       />
+      <div
+        class="loading"
+        v-if="isLoading"
+        v-loading="true"
+        element-loading-text="Predicting..."
+      ></div>
     </section>
   </div>
 </template>
@@ -52,7 +66,9 @@ export default {
   data: () => ({
     imageUrl: '',
     activeFileName: '',
-    prediction: null
+    prediction: null,
+    isLoading: false,
+    isImgReady: false
   }),
   computed: {
     hasUploaded() {
@@ -65,9 +81,12 @@ export default {
         this.prediction = prediction
         this.imageUrl = URL.createObjectURL(file.raw)
       }
+      this.isLoading = false
+      this.isImgReady = false
     },
     beforeAvatarUpload({ type, size, name }) {
       this.prediction = null
+      this.imageUrl = ''
 
       const isValidType = VALID_FILE_TYPES.includes(type)
       const isLt2M = size / MAX_SIZE < 2
@@ -78,9 +97,13 @@ export default {
         this.$message.error(TOO_LARGE_MSG)
       } else {
         this.activeFileName = name
+        this.isLoading = true
       }
 
       return isValidType && isLt2M
+    },
+    onImgLoaded() {
+      this.isImgReady = true
     }
   },
   components: {
@@ -111,10 +134,6 @@ export default {
   max-width: 400px;
   width: 320px;
   height: 320px;
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
-  &:hover {
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.1);
-  }
 }
 
 .preview-box {
@@ -130,6 +149,19 @@ export default {
 .prediction {
   margin-top: 2rem;
 }
+.loading {
+  margin-top: 5rem;
+}
+
+.fade-enter-active {
+  transition: opacity 0.5s ease-in-out;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-enter {
+  opacity: 0;
+}
 </style>
 
 <style lang="scss">
@@ -141,7 +173,7 @@ export default {
   }
   .avatar-uploader {
     position: absolute;
-    top: 50%;
+    top: calc(50% - 2px);
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
@@ -176,16 +208,23 @@ export default {
   .avatar-uploader-icon {
     font-size: 28px;
     color: var(--desc);
-    width: 240px;
-    height: 240px;
-    line-height: 240px;
+    width: 256px;
+    height: 256px;
+    line-height: 256px;
     text-align: center;
     transition: color 0.2s;
   }
   .avatar {
-    width: 240px;
-    height: 240px;
+    width: 256px;
+    height: 256px;
     display: block;
+  }
+}
+
+.card-shadow {
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
+  &:hover {
+    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.2);
   }
 }
 </style>
