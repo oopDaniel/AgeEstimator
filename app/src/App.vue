@@ -47,7 +47,7 @@ body {
 }
 
 .face-logo {
-  font-size: 8rem;
+  font-size: 6rem;
   color: var(--theme1);
   transition: color 0.2s;
   &:hover {

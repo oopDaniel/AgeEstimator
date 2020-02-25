@@ -27,8 +27,10 @@ app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 @app.route('/api/predict_age', methods=['POST'])
 def predict_age():
     try:
-        file_stream = request.files['file']
-        nparr = np.fromstring(file_stream.read(), np.uint8)
+        file = request.files['file']
+        file_name = file.filename
+        print(file.filename)
+        nparr = np.fromstring(file.read(), np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
         # TODO call the model
@@ -39,7 +41,11 @@ def predict_age():
         message = "Invalid format"
         age = None
 
-    return jsonify({"message": message, "age": age})
+    return jsonify({
+        "name": file_name,
+        "message": message,
+        "ages": {"cnn": age, "regression": 12, "clustering": 24}
+    })
 
 
 app.run(port=5000, debug=True)
