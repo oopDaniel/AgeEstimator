@@ -8,7 +8,7 @@
         <el-card class="card-box">
           <el-upload
             class="avatar-uploader"
-            action=""
+            action="/api/predict_age"
             :show-file-list="false"
             :on-preview="handleAvatarPreview"
             :on-success="handleAvatarSuccess"
