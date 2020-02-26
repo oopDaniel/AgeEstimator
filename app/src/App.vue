@@ -23,6 +23,7 @@ export default {
   --theme1-light: #64c89b;
   --theme3: #f56c6c;
   --theme2: #106fb2;
+  --danger: #ed1c24;
   --title: #2c3e50;
   --desc: #6a8bad;
 }

@@ -38,22 +38,29 @@
         :ages="prediction.ages"
       />
       <div
-        class="loading"
+        class="upload-hint"
         v-if="isLoading"
         v-loading="true"
         element-loading-text="Predicting..."
       ></div>
+      <div class="upload-hint error" v-show="errorMessage !== ''">
+        {{ errorMessage }}
+      </div>
     </section>
   </div>
 </template>
 
 <script>
+import * as R from 'ramda'
 import PhotoPrediction from './PhotoPrediction'
 
 const VALID_FILE_TYPES = ['image/png', 'image/jpeg']
 const UNSUPPORTED_MSG = 'Unsupported picture format. Please upload a JPG or PNG'
 const TOO_LARGE_MSG = 'Picture size can not exceed 2MB'
 const MAX_SIZE = 1024 ** 2
+
+const isNotNil = R.complement(R.isNil)
+const isNotNilByProp = prop => R.both(isNotNil, R.propSatisfies(isNotNil, prop))
 
 export default {
   name: 'PhotoUploader',
@@ -72,7 +79,16 @@ export default {
   }),
   computed: {
     hasUploaded() {
-      return this.prediction !== null && this.prediction.ages !== undefined
+      return isNotNilByProp('ages')(this.prediction)
+    },
+    errorMessage() {
+      return R.compose(
+        R.ifElse(
+          R.both(isNotNilByProp('message'), R.propSatisfies(R.isNil, 'ages')),
+          R.prop('message'),
+          R.always('')
+        )
+      )(this.prediction)
     }
   },
   methods: {
@@ -149,8 +165,11 @@ export default {
 .prediction {
   margin-top: 2rem;
 }
-.loading {
+.upload-hint {
   margin-top: 5rem;
+}
+.error {
+  color: var(--danger);
 }
 
 .fade-enter-active {

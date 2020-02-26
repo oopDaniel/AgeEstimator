@@ -7,7 +7,7 @@
         v-for="([model, age], index) in ageList"
         :key="model"
       >
-        <div :class="getAgeClass(index)">{{ age }}</div>
+        <div :class="getAgeClass(index)">{{ age | errorOrRoundInt }}</div>
         <div v-if="showModelName" class="model">- {{ model | modelName }}</div>
       </el-card>
     </div>
@@ -16,6 +16,12 @@
 
 <script>
 import * as R from 'ramda'
+
+const errorOrRoundInt = R.ifElse(
+  R.lt(0),
+  R.compose(R.apply(Math.round, R.__), R.of),
+  R.always('Err')
+)
 
 export default {
   name: 'PhotoPrediction',
@@ -52,7 +58,8 @@ export default {
       }
       // TODO: add prettified name for other models
       return model
-    }
+    },
+    errorOrRoundInt
   }
 }
 </script>
