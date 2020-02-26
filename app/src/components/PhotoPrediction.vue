@@ -7,7 +7,21 @@
         v-for="([model, age], index) in ageList"
         :key="model"
       >
-        <div :class="getAgeClass(index)">{{ age | errorOrRoundInt }}</div>
+        <div :class="getAgeClass(index)">
+          <font-awesome-icon
+            v-show="hasError(age)"
+            class="large-font"
+            :icon="['fas', 'bug']"
+          />
+          <span
+            :class="{
+              'large-font': !hasError(age),
+              'small-font': hasError(age)
+            }"
+          >
+            {{ age | errorOrRoundInt }}
+          </span>
+        </div>
         <div v-if="showModelName" class="model">- {{ model | modelName }}</div>
       </el-card>
     </div>
@@ -17,10 +31,11 @@
 <script>
 import * as R from 'ramda'
 
+const hasError = R.gte(0)
 const errorOrRoundInt = R.ifElse(
-  R.lt(0),
-  R.compose(R.apply(Math.round, R.__), R.of),
-  R.always('Err')
+  hasError,
+  R.always('Something went wrong ;('),
+  R.compose(R.apply(Math.round, R.__), R.of)
 )
 
 export default {
@@ -44,11 +59,12 @@ export default {
     }
   },
   methods: {
+    hasError,
     getAgeClass(index) {
       return R.when(
         () => R.equals(false, this.showModelName),
-        R.concat(R.__, ' number-only')
-      )(`age color-${index + 1}`)
+        R.concat(R.__, ' largest-font')
+      )(`age-box color-${index + 1}`)
     }
   },
   filters: {
@@ -68,6 +84,7 @@ export default {
 .card-container {
   display: flex;
   justify-content: center;
+  cursor: pointer;
 }
 
 .prediction-card {
@@ -80,12 +97,29 @@ export default {
   padding: 2rem;
 }
 
-.age {
+.age-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding-top: 0.5rem;
-  font-size: 6rem;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+.large-font {
+  font-size: 6rem;
+}
+.small-font {
+  display: flex;
+  align-items: flex-end;
+  min-height: 40px;
+  color: var(--desc);
+}
 
+.largest-font {
+  padding-top: 1.2rem;
+  &.large-font {
+    font-size: 8rem;
+  }
+}
 .model {
   padding-top: 1.2rem;
   font-style: italic;
@@ -103,10 +137,5 @@ export default {
 
 .color-2 {
   color: var(--theme1);
-}
-
-.number-only {
-  padding-top: 1.2rem;
-  font-size: 8rem;
 }
 </style>

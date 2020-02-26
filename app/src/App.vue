@@ -54,5 +54,6 @@ body {
   &:hover {
     color: var(--theme1-light);
   }
+  cursor: pointer;
 }
 </style>

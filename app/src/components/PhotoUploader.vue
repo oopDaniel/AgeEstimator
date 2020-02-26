@@ -44,6 +44,7 @@
         element-loading-text="Predicting..."
       ></div>
       <div class="upload-hint error" v-show="errorMessage !== ''">
+        <font-awesome-icon :icon="['fas', 'radiation-alt']" />
         {{ errorMessage }}
       </div>
     </section>
