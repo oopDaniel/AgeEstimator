@@ -80,7 +80,6 @@ def predict_age():
     # Prediction - Regression
     try:
         age_regression = random.randint(34, 48)
-        raise ValueError
     except Exception as error:
         print("Regression Error:", error)
         age_regression = -1
