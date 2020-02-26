@@ -3,12 +3,19 @@ to pre-trained weight(s).
 
 Import this module instead of calling it in CLI.
 """
+import os
 from tensorflow.keras.layers import *
 from tensorflow.keras.models import Model
 from tensorflow.keras.applications import VGG16
 
 OLD_WEIGHTS_PATH = "old_vgg_regression_weights.hdf5"
 BEST_WEIGHTS_PATH = "best_vgg_regression_weights.hdf5"
+
+# Make compatible path for Python and Jupyter Notebook
+try:
+    CURR_DIR = os.path.dirname(os.path.realpath(__file__))
+except NameError:
+    CURR_DIR = os.getcwd()
 
 
 def get_model(summary=True):

@@ -10,7 +10,7 @@ import re
 import shutil
 import matplotlib.image as img
 import numpy as np
-import data_file_utils
+from server.data import data_file_utils
 
 
 # ## Utils
