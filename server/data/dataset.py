@@ -6,7 +6,6 @@
 
 import glob
 import os
-from sklearn.model_selection import train_test_split
 from . import dirs
 from . import data_file_utils
 
@@ -38,9 +37,3 @@ class DataLoader(object):
     def load_test(self):
         r"""File names of test data and their labels"""
         return self.x_test, self.y_test
-
-    def load_train_val_split(self, shuffle=False):
-        r"""File names of training/validation data and
-            their labels"""
-        return train_test_split(
-            self.x_train, self.y_train, test_size=0.2, shuffle=shuffle)
