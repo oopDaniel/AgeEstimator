@@ -14,8 +14,8 @@ import pandas as pd
 
 # --------------- Global Vars -------------------
 
-OLD_WEIGHTS_PATH = "old_res50_classification_weights.hdf5"
-BEST_WEIGHTS_PATH = "best_res50_classification_weights.hdf5"
+OLD_WEIGHTS_PATH = "old_resnet50_classification_weights.hdf5"
+BEST_WEIGHTS_PATH = "best_resnet50_classification_weights.hdf5"
 
 IMAGE_SIZE = (250, 250)
 INPUT_SHAPE = IMAGE_SIZE + (3,)
