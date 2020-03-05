@@ -2,5 +2,7 @@
 __pycache__
 server/data/*
 .vscode/
+.idea
+.DS_Store
 server/models/*/logs
 server/models/*/*.csv
