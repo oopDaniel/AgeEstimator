@@ -3,6 +3,7 @@
 make predictions based on pretrained models.
 """
 
+from server.models.regression.predict import predict as reg_predict
 import sys
 import os
 import random
@@ -30,7 +31,10 @@ from server.models.regression.predict import predict as reg_predict  # noqa: F40
 == == == =
 # from server.models.cnn.predict import predict as cnn_predict    # noqa: F404
 from server.data.unify_dimension import resize_rgb_img          # noqa: F404
+<< << << < HEAD
 >>>>>> > change main
+== == == =
+>>>>>> > add regression model
 
 # Messages
 INVALID_FORMAT = "Invalid image format"
