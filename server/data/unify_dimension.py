@@ -87,7 +87,7 @@ def preprocess_utkface(target_dir, padding_digits=5):
     for i, file_name in enumerate(glob.glob("utkface/*.jpg")):
         image = img.imread(file_name)
 
-        file_name = re.sub(r'^\D+\/', '', file_name)
+        file_name = re.sub(r'^\D+/', '', file_name)
         age = data_file_utils.get_age_by_file_name(file_name)
 
         resize_rgb_img(image, (250, 250), '%s/%d_utk_%s.jpg' % (
