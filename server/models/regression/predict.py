@@ -42,7 +42,10 @@ def predict(img):
     else:
         print("No existent weight found. Train the network before using it.")
         raise FileNotFoundError
-    # img = Image.fromarray(img,astype('unit8'), 'RGB')
+    
+    img = np.array(img)
+    # print(type(img))
+    img = Image.fromarray(img, 'RGB')
     image = img.convert('L')
     image = image.filter(ImageFilter.UnsharpMask(radius=2, percent=150, threshold=3))
     image = np.array(image).reshape(1, 250*250)
