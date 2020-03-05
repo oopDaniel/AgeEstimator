@@ -21,9 +21,8 @@ def predict(img):
     model = get_model(summary=False)
     if os.path.exists(os.path.join(CURR_DIR, BEST_WEIGHTS_PATH)):
         model.load_weights(os.path.join(CURR_DIR, BEST_WEIGHTS_PATH))
-    elif os.path.exists(os.path.exists(os.path.join(CURR_DIR, OLD_WEIGHTS_PATH))):
-        model.load_weights(os.path.exists(
-            os.path.join(CURR_DIR, OLD_WEIGHTS_PATH)))
+    elif os.path.exists(os.path.join(CURR_DIR, OLD_WEIGHTS_PATH)):
+        model.load_weights(os.path.join(CURR_DIR, OLD_WEIGHTS_PATH))
     else:
         print("No existent weight found. Train the network before using it.")
         raise FileNotFoundError
