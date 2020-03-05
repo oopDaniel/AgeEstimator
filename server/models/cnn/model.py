@@ -7,17 +7,18 @@ import os
 import itertools
 from tensorflow.keras.layers import *
 from tensorflow.keras.models import Model
-from tensorflow.keras.applications import ResNet50, VGG16
+from tensorflow.keras.applications import ResNet50V2, VGG16
 from tensorflow.keras.optimizers import *
 from keras_vggface.vggface import VGGFace
 import pandas as pd
 
 # --------------- Global Vars -------------------
 
-OLD_WEIGHTS_PATH = "old_resnet50_classification_weights.hdf5"
-BEST_WEIGHTS_PATH = "best_resnet50_classification_weights.hdf5"
+OLD_WEIGHTS_PATH = "old_vggface_classification_weights.hdf5"
+BEST_WEIGHTS_PATH = "best_vggface_classification_weights.hdf5"
+BEST_MODEL_PATH = "best_vggface_classification_model.h5"
 
-IMAGE_SIZE = (250, 250)
+IMAGE_SIZE = (224, 224)
 INPUT_SHAPE = IMAGE_SIZE + (3,)
 
 # Make compatible path for Python and Jupyter Notebook
@@ -27,7 +28,8 @@ except NameError:
     CURR_DIR = os.getcwd()
 
 LABEL_MAPPING = pd.Series.from_csv(
-    "./age_class_mapping.csv", header=0).to_dict()
+    os.path.join(CURR_DIR, "age_class_mapping.csv"),
+    header=0).to_dict()
 N_CLASSES = len(set(LABEL_MAPPING.values()))
 
 # ---------- Shared pretrained models ------------
@@ -36,10 +38,10 @@ vgg = VGG16(weights="imagenet", include_top=False,
             input_shape=INPUT_SHAPE)
 vgg_avg = VGG16(weights="imagenet", include_top=False,
                 input_shape=INPUT_SHAPE, pooling="avg")
-res50 = ResNet50(weights="imagenet", include_top=False,
-                 input_shape=INPUT_SHAPE)
-res50_avg = ResNet50(weights="imagenet", include_top=False,
-                     input_shape=INPUT_SHAPE, pooling="avg")
+res50 = ResNet50V2(weights="imagenet", include_top=False,
+                   input_shape=INPUT_SHAPE)
+res50_avg = ResNet50V2(weights="imagenet", include_top=False,
+                       input_shape=INPUT_SHAPE, pooling="avg")
 vgg_face = VGGFace(model="resnet50", include_top=False,
                    input_shape=INPUT_SHAPE)
 
@@ -59,7 +61,7 @@ def get_model(summary=True):
                     The model's definition
     """
 
-    _, m = get_res50_7()
+    _, m = get_vgg_face3()
 
     if summary:
         m.summary()
@@ -216,7 +218,19 @@ def get_vgg_face2():
               kernel_initializer="he_uniform")(x)
 
     m = Model(inputs=x_in, outputs=x)
-    return "vggface-512-2Dense-he_uniform", m
+    return "vggface-256-2Dense-he_uniform", m
+
+
+def get_vgg_face3():
+    x = x_in = Input(INPUT_SHAPE, name="input")
+    x = vgg_face(x)
+    x = Flatten(name="fl")(x)
+    x = Dense(256, name="d1.5", activation="relu")(x)
+    x = BatchNormalization()(x)
+    x = Dense(N_CLASSES, name="d2", activation="softmax")(x)
+
+    m = Model(inputs=x_in, outputs=x)
+    return "vggface-256-2Dense", m
 
 # ---------------- VGG16 start ----------------
 

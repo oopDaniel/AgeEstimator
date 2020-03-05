@@ -22,7 +22,8 @@ def predict(img):
     if os.path.exists(os.path.join(CURR_DIR, BEST_WEIGHTS_PATH)):
         model.load_weights(os.path.join(CURR_DIR, BEST_WEIGHTS_PATH))
     elif os.path.exists(os.path.exists(os.path.join(CURR_DIR, OLD_WEIGHTS_PATH))):
-        model.load_weights(os.path.exists(os.path.join(CURR_DIR, OLD_WEIGHTS_PATH)))
+        model.load_weights(os.path.exists(
+            os.path.join(CURR_DIR, OLD_WEIGHTS_PATH)))
     else:
         print("No existent weight found. Train the network before using it.")
         raise FileNotFoundError
@@ -37,5 +38,4 @@ def predict(img):
     except tf.errors.InvalidArgumentError:
         print("[TF] Invalid Argument Error")
         raise ValueError
-
     return round(result, 1)
