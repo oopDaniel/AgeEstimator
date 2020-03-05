@@ -23,7 +23,7 @@ if MODULE_PATH not in sys.path:
     sys.path.append(MODULE_PATH)
 
 # pylint: disable=wrong-import-position
-from server.models.cnn.predict import predict as cnn_predict    # noqa: F404
+# from server.models.cnn.predict import predict as cnn_predict    # noqa: F404
 from server.data.unify_dimension import resize_rgb_img          # noqa: F404
 
 # Messages
@@ -66,7 +66,8 @@ def predict_age():
 
     # Prediction - CNN
     try:
-        age_cnn = cnn_predict(img)
+        # age_cnn = cnn_predict(img)
+        age_cnn = random.randint(2, 80)
     except ValueError:
         message = VALUE_ERROR
         age_cnn = -1
