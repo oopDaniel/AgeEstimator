@@ -23,8 +23,9 @@ if MODULE_PATH not in sys.path:
     sys.path.append(MODULE_PATH)
 
 # pylint: disable=wrong-import-position
-from server.models.input_shape import INPUT_SHAPE              # noqa: F404
-from server.models.cnn.predict import predict as cnn_predict   # noqa: F404
+from server.models.input_shape import INPUT_SHAPE                    # noqa: F404
+from server.models.cnn.predict import predict as cnn_predict         # noqa: F404
+from server.models.regression.predict import predict as reg_predict  # noqa: F404
 
 # Messages
 INVALID_FORMAT = "Invalid image format"
@@ -82,7 +83,7 @@ def predict_age():
 
     # Prediction - Regression
     try:
-        age_regression = random.randint(34, 48)
+        age_regression = reg_predict(img)
         success_count += 1
     except Exception as error:
         print("Regression Error:", error)
