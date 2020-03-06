@@ -5,3 +5,6 @@ flask
 opencv-python
 numpy
 git+https://github.com/rcmalli/keras-vggface.git@master
+Pillow
+torch
+torchvision
