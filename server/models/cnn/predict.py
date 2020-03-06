@@ -5,9 +5,11 @@ Import this module instead of calling it in CLI.
 """
 
 import os
+import cv2
+import numpy as np
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from server.models.cnn.model import get_model, OLD_WEIGHTS_PATH, BEST_WEIGHTS_PATH, CURR_DIR
+from server.models.cnn.model import get_model, IMAGE_SIZE, OLD_WEIGHTS_PATH, BEST_WEIGHTS_PATH, CURR_DIR
 
 
 def predict(img):
@@ -28,13 +30,25 @@ def predict(img):
         raise FileNotFoundError
 
     # Add batch size as first dimension
+    img = cv2.resize(img, IMAGE_SIZE)
     img = img.reshape((1,) + img.shape)
 
     try:
         data_gen = ImageDataGenerator(rescale=1./255)
         test_gen = data_gen.flow(img)
-        result = model.predict(test_gen).item()
+        y_hat = model.predict(test_gen)
+
+        # TODO: map class back to age
+        possibles_predictions = y_hat.argsort()[:, -5:]
+        print("Possible labels:", possibles_predictions)
+
+        result = int(possibles_predictions.flatten()[-1])
+
     except tf.errors.InvalidArgumentError:
         print("[TF] Invalid Argument Error")
         raise ValueError
-    return round(result, 1)
+    except Exception:
+        print("EXP")
+
+    return result
+    # return round(result, 1)

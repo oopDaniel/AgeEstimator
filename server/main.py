@@ -23,8 +23,8 @@ if MODULE_PATH not in sys.path:
     sys.path.append(MODULE_PATH)
 
 # pylint: disable=wrong-import-position
-from server.models.cnn.predict import predict as cnn_predict    # noqa: F404
-from server.data.unify_dimension import resize_rgb_img          # noqa: F404
+from server.models.input_shape import INPUT_SHAPE              # noqa: F404
+from server.models.cnn.predict import predict as cnn_predict   # noqa: F404
 
 # Messages
 INVALID_FORMAT = "Invalid image format"
@@ -62,7 +62,7 @@ def predict_age():
         })
 
     # Resize img
-    img = resize_rgb_img(img, (250, 250))
+    img = cv2.resize(img, INPUT_SHAPE)
 
     # Prediction - CNN
     try:
