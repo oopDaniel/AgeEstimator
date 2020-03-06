@@ -32,6 +32,7 @@ NO_WEIGHT_FOUND = "The model isn't ready"
 VALUE_ERROR = "Value error"
 PARTIAL_SUCCESS = "Partially Succeed"
 SUCCESS = "Succeed!"
+FAILURE = "Something wrong with the models"
 
 # pylint: disable=invalid-name
 app = Flask(__name__)
@@ -64,9 +65,11 @@ def predict_age():
     # Resize img
     img = cv2.resize(img, INPUT_SHAPE)
 
+    success_count = 0
     # Prediction - CNN
     try:
         age_cnn = cnn_predict(img)
+        success_count += 1
     except ValueError:
         message = VALUE_ERROR
         age_cnn = -1
@@ -80,6 +83,7 @@ def predict_age():
     # Prediction - Regression
     try:
         age_regression = random.randint(34, 48)
+        success_count += 1
     except Exception as error:
         print("Regression Error:", error)
         age_regression = -1
@@ -87,17 +91,21 @@ def predict_age():
     # Prediction - Clustering
     try:
         age_cluster = random.randint(2, 80)
+        success_count += 1
     except Exception as error:
         print("Clustering Error:", error)
         age_cluster = -1
 
     ages = {
         "cnn": age_cnn,
-        "regression": age_regression,
-        "clustering": age_cluster,
+        "regression": str(age_regression),
+        "clustering": str(age_cluster),
     }
-    message = SUCCESS if all(age != -1 for age in ages.values()) \
-        else PARTIAL_SUCCESS
+
+    if success_count == 3:
+        message = SUCCESS
+    else:
+        message = FAILURE if success_count == 0 else PARTIAL_SUCCESS
 
     return jsonify({
         "name": file_name,

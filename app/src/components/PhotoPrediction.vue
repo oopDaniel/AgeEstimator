@@ -19,7 +19,7 @@
               'small-font': hasError(age)
             }"
           >
-            {{ age | errorOrRoundInt }}
+            {{ age | errorOrDisplay }}
           </span>
         </div>
         <div v-if="showModelName" class="model">- {{ model | modelName }}</div>
@@ -31,12 +31,8 @@
 <script>
 import * as R from 'ramda'
 
-const hasError = R.gte(0)
-const errorOrRoundInt = R.ifElse(
-  hasError,
-  R.always('Something went wrong ;('),
-  R.compose(R.apply(Math.round, R.__), R.of)
-)
+const hasError = R.either(R.equals('0'), R.equals('-1'))
+const errorOrDisplay = R.when(hasError, R.always('Something went wrong ;('))
 
 export default {
   name: 'PhotoPrediction',
@@ -44,7 +40,7 @@ export default {
     ages: {
       type: Object,
       validator: R.compose(
-        R.all(R.is(Number)),
+        R.all(R.is(String)),
         R.props(['cnn', 'regression', 'clustering'])
       )
     },
@@ -72,10 +68,13 @@ export default {
       if (model === 'cnn') {
         return 'Convolutional Neural Network'
       }
-      // TODO: add prettified name for other models
+      if (model === 'regression') {
+        return 'Logistic Regression'
+      }
+      // TODO: add prettified name for clustering
       return model
     },
-    errorOrRoundInt
+    errorOrDisplay
   }
 }
 </script>
@@ -92,9 +91,9 @@ export default {
   box-sizing: border-box;
   min-height: 300px;
   max-width: 320px;
-  margin-left: 3rem;
-  margin-right: 3rem;
-  padding: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  padding: 3rem 1rem 2rem;
 }
 
 .age-box {
@@ -105,7 +104,7 @@ export default {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .large-font {
-  font-size: 6rem;
+  font-size: 5rem;
 }
 .small-font {
   display: flex;
