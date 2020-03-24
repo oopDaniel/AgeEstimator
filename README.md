@@ -1,6 +1,6 @@
 # Age Estimator
 
-![](./preview/app.png)
+![](./preview/app.gif)
 
 Estimate the age based on human facial images. To perform the task, we use 3 different machine learning models:
 
