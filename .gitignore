@@ -1,0 +1,4 @@
+node_modules
+__pycache__
+server/data/*.png
+server/data/*.npy

@@ -1,0 +1,11 @@
+tensorflow
+matplotlib
+pandas==0.23.4
+flask
+opencv-python
+numpy
+git+https://github.com/oopdaniel/keras-vggface.git@master
+Pillow
+torch
+torchvision
+git+https://github.com/oopdaniel/mtcnn@master
