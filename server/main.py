@@ -27,7 +27,7 @@ if MODULE_PATH not in sys.path:
 from server.models.input_shape import INPUT_SHAPE                    # noqa: F404
 from server.models.cnn.predict import predict as cnn_predict         # noqa: F404
 from server.models.regression.predict import predict as reg_predict  # noqa: F404
-from server.models.clustering.predict import predict as nb_predict   # noqa: F404
+from server.models.nb.predict import predict as nb_predict           # noqa: F404
 
 # Messages
 INVALID_FORMAT = "Invalid image format"
